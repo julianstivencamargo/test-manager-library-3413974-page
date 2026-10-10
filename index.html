@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manager Library — Sistema de Gestión Bibliotecaria</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header & Nav -->
+  <header class="header">
+    <div class="container nav-container">
+      <div class="logo">
+        <span class="logo-icon">📚</span>
+        <span class="logo-text">Manager<strong>Library</strong></span>
+      </div>
+      <nav class="nav">
+        <a href="#features">Características</a>
+        <a href="#architecture">Arquitectura</a>
+        <a href="#rules">Reglas de Dominio</a>
+        <a href="#stack">Tecnología</a>
+      </nav>
+      <div class="header-badge">Ficha ADSO 3413974</div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-container">
+      <div class="hero-badge">Prueba Técnica · SDD & Hexagonal Architecture</div>
+      <h1 class="hero-title">Gestión Bibliotecaria Rigurosa, Concurrente y Escalable</h1>
+      <p class="hero-subtitle">
+        Una solución de nivel empresarial desarrollada bajo <em>Spec-Driven Development</em> (SDD)
+        con PHP 8.2 (Laravel 11), Arquitectura Hexagonal pura y contenedorización Docker-First.
+      </p>
+      <div class="hero-actions">
+        <a href="#features" class="btn btn-primary">Explorar Sistema</a>
+        <a href="#rules" class="btn btn-secondary">Invariantes de Dominio</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Metrics Bar -->
+  <section class="metrics-bar">
+    <div class="container metrics-grid">
+      <div class="metric-item">
+        <div class="metric-value">100%</div>
+        <div class="metric-label">SDD & Trazabilidad</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-value">62/62</div>
+        <div class="metric-label">Pruebas Automatizadas</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-value">5</div>
+        <div class="metric-label">Categorías Inmutables</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-value">0</div>
+        <div class="metric-label">Dependencias de Infra en Dominio</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Features -->
+  <section id="features" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Capacidades del Sistema</h2>
+        <p class="section-description">Diseñado específicamente para el control de inventario físico, préstamos multi-ítem y auditoría histórica.</p>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <div class="card-icon">📖</div>
+          <h3 class="card-title">Catálogo con ISBN-13</h3>
+          <p class="card-text">
+            Validación de formato estricto de 13 dígitos numéricos, normalización automática de guiones y espacios exteriores, y unicidad parcial sobre libros activos.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">👥</div>
+          <h3 class="card-title">Gestión de Socios</h3>
+          <p class="card-text">
+            Registro con documento único inmutable. Límites estrictos de préstamos activos (máximo 3 libros simultáneos) y bloqueo ante mora.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🔄</div>
+          <h3 class="card-title">Préstamos Multi-Línea</h3>
+          <p class="card-text">
+            Operaciones atómicas de 1 a 3 libros sin duplicados. Congelamiento histórico instantáneo de título, ISBN y nombre de categoría en cada línea.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">⏰</div>
+          <h3 class="card-title">Devoluciones y Vencidos</h3>
+          <p class="card-text">
+            Plazo contractual de 14 días en UTC. Control de concurrencia optimista y cheques de base de datos que impiden que los disponibles superen el total.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <h3 class="card-title">Reportes Inmutables</h3>
+          <p class="card-text">
+            Ranking de libros más prestados por rango temporal. ADR-004 garantiza que los datos históricos no mutan ante posteriores ediciones de catálogo.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🔒</div>
+          <h3 class="card-title">Seguridad RFC 7519</h3>
+          <p class="card-text">
+            Autenticación JWT con rotación cada 8 horas. Roles estrictos (<code>admin</code> provisto por entorno, <code>librarian</code> provisto por admin).
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Business Invariants & Architecture -->
+  <section id="rules" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Invariantes de Dominio y ADRs</h2>
+        <p class="section-description">Reglas no negociables protegidas por el núcleo de dominio y la base de datos.</p>
+      </div>
+
+      <div class="rules-grid">
+        <div class="rule-box">
+          <div class="rule-tag">RN-1 & CK-1</div>
+          <h4>Rango de Ejemplares Disponibles</h4>
+          <p>Los ejemplares disponibles siempre satisfacen <code>0 &le; available_copies &le; total_copies</code>. Garantizado por el agregado <code>Book</code> y el constraint PostgreSQL <code>ck_book_available_range</code>.</p>
+        </div>
+
+        <div class="rule-box">
+          <div class="rule-tag">RN-2 & RN-3</div>
+          <h4>Límites Contractuales del Socio</h4>
+          <p>Un socio no puede tener más de 3 libros sin devolver en total. Si tiene algún libro con <code>due_at &lt; now()</code>, no puede solicitar préstamos adicionales hasta ponerse al día.</p>
+        </div>
+
+        <div class="rule-box">
+          <div class="rule-tag">RN-4 & ADR-004</div>
+          <h4>Congelamiento de Línea de Préstamo</h4>
+          <p>Cada línea de préstamo congela el título, ISBN y nombre de categoría en el instante del préstamo. Renombrar un libro o categoría en el catálogo nunca altera los reportes pasados.</p>
+        </div>
+
+        <div class="rule-box">
+          <div class="rule-tag">RN-5 & ADR-003</div>
+          <h4>Baja Lógica y Preservación Histórica</h4>
+          <p>Los libros utilizan baja lógica (<code>deleted_at</code>). Préstamos y devoluciones jamás se eliminan de la base de datos para preservar la trazabilidad de auditoría.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stack Section -->
+  <section id="stack" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Tecnologías del Reto</h2>
+        <p class="section-description">Stack oficial traducido desde la especificación abstracta.</p>
+      </div>
+
+      <div class="stack-grid">
+        <div class="stack-card">
+          <div class="stack-header">Backend</div>
+          <div class="stack-name">PHP 8.2 & Laravel 11</div>
+          <p class="stack-desc">Arquitectura Hexagonal, POPO domain entities, objetos de valor inmutables (<code>Isbn</code>, <code>Quantity</code>, <code>DateRange</code>), JWT stateless.</p>
+        </div>
+
+        <div class="stack-card">
+          <div class="stack-header">Base de Datos</div>
+          <div class="stack-name">PostgreSQL 16 Alpine</div>
+          <p class="stack-desc">Esquema aislado <code>library</code>, migraciones en <code>public</code>, índices parciales únicos, cero columnas con <code>DEFAULT</code>.</p>
+        </div>
+
+        <div class="stack-card">
+          <div class="stack-header">Frontend</div>
+          <div class="stack-name">React SPA</div>
+          <p class="stack-desc">Gestión de catálogo, préstamos, devoluciones en tiempo real, alertas de vencimiento y panel de reportes interactivo.</p>
+        </div>
+
+        <div class="stack-card">
+          <div class="stack-header">Infraestructura</div>
+          <div class="stack-name">Docker Compose</div>
+          <p class="stack-desc">Despliegue unificado con un solo comando, redes aisladas, volúmenes anónimos para dependencias y verificación en contenedores.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <p>&copy; 2026 Manager Library — Ficha ADSO 3413974. Proyecto desarrollado bajo Spec-Driven Development (SDD).</p>
+      <div class="footer-links">
+        <span>Feria de Proyectos</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
